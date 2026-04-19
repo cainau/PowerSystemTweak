@@ -67,7 +67,7 @@ namespace PowerSystemTweek
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(PowerSystem), nameof(PowerSystem.GameTick))]
-        static bool GameTickPrefixExperimental(PowerSystem __instance, DysonSphere ___dysonSphere, long time, bool isActive, bool isMultithreadMode = false)
+        static bool GameTickPrefixExperimental(PowerSystem __instance, PlanetFactory ___factory, long time, bool isActive, bool multithreaded = false)
         {
             if (!PowerSystemGameTickPatch)
             {
@@ -75,7 +75,7 @@ namespace PowerSystemTweek
             }
             var powerSystem = __instance;
             StopWatchList[powerSystem.factory.index].Begin();
-            DysonSphere dysonSphere = ___dysonSphere;
+            DysonSphere dysonSphere = ___factory.dysonSphere;
 
             FactoryProductionStat factoryProductionStat = GameMain.statistics.production.factoryStatPool[powerSystem.factory.index];
             int[] productRegister = factoryProductionStat.productRegister;
@@ -107,7 +107,7 @@ namespace PowerSystemTweek
             if (mainPlayer.mecha.coreEnergyCap - mainPlayer.mecha.coreEnergy > 0.0 && mainPlayer.isAlive && mainPlayer.planetId == planet.id)
             {
                 float num7 = powerSystem.factory.planet.realRadius + 0.2f;
-                Vector3 vector3_2 = isMultithreadMode ? powerSystem.multithreadPlayerPos : mainPlayer.position;
+                Vector3 vector3_2 = multithreaded ? powerSystem.multithreadPlayerPos : mainPlayer.position;
                 float magnitude = vector3_2.magnitude;
                 if ((double)magnitude > 0.0)
                     vector3_1 = vector3_2 * (num7 / magnitude);
