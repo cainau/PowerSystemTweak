@@ -67,7 +67,7 @@ namespace PowerSystemTweek
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(PowerSystem), nameof(PowerSystem.GameTick))]
-        static bool GameTickPrefixExperimental(PowerSystem __instance, PlanetFactory ___factory, long time, bool isActive, bool multithreaded = false)
+        static bool GameTickPrefixExperimental(PowerSystem __instance, long time, bool isActive, bool multithreaded = false)
         {
             if (!PowerSystemGameTickPatch)
             {
@@ -75,7 +75,7 @@ namespace PowerSystemTweek
             }
             var powerSystem = __instance;
             StopWatchList[powerSystem.factory.index].Begin();
-            DysonSphere dysonSphere = ___factory.dysonSphere;
+            DysonSphere dysonSphere = powerSystem.factory.dysonSphere;
 
             FactoryProductionStat factoryProductionStat = GameMain.statistics.production.factoryStatPool[powerSystem.factory.index];
             int[] productRegister = factoryProductionStat.productRegister;
